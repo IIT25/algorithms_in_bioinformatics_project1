@@ -51,17 +51,18 @@ def check_sequences_validity(sequences, alphabet):
                 raise Exception(f"'{site}' of sequence {i} is not part of the defined alphabet {alphabet}")
 
 def backtrack_from_score_matrix(i: int, j: int, sequences: list, score_matrix: list, cost_matrix: list, gapcost: int, alignment1: str = '', alignment2: str = ''):
-    if i > 0 and j > 0 and score_matrix[i][j] == score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][i-1])][alphabet.index(sequences[1][j-1])]:
-        alignment1 += sequences[0][i-1]
-        alignment2 += sequences[1][j-1]
+    #print(i,j)
+    if i > 0 and j > 0 and score_matrix[i][j] == score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][j-1])][alphabet.index(sequences[1][i-1])]:
+        alignment1 += sequences[0][j-1]
+        alignment2 += sequences[1][i-1]
         return backtrack_from_score_matrix(i-1, j-1, sequences, score_matrix, cost_matrix, gapcost, alignment1, alignment2)
     elif i > 0 and j >= 0 and score_matrix[i][j] == score_matrix[i-1][j] + gapcost:
-        alignment1 += sequences[0][i-1]
-        alignment2 += '-'
+        alignment1 += '-'
+        alignment2 += sequences[1][i-1]
         return backtrack_from_score_matrix(i-1, j, sequences, score_matrix, cost_matrix, gapcost, alignment1, alignment2)
     elif i >= 0 and j > 0 and score_matrix[i][j] == score_matrix[i][j-1] + gapcost:
-        alignment1 += '-'
-        alignment2 += sequences[1][j-1]
+        alignment1 += sequences[0][j-1]
+        alignment2 += '-'
         return backtrack_from_score_matrix(i, j-1, sequences, score_matrix, cost_matrix, gapcost, alignment1, alignment2)
     return alignment1[::-1], alignment2[::-1] #The alignments were filled from back to front, so we must invert the string of each
 
@@ -79,17 +80,21 @@ def global_linear(sequences: list, alphabet: list, cost_matrix: list, gap_cost: 
     #print(sequences)
     n = len(sequences[0])
     m = len(sequences[1])
-    score_matrix = [list(range(n+1))] + [[i+1] + [0] * n for i in range(m)]
+    score_matrix = [list(range(n+1))] + [[(i+1)* gap_cost] + [0] * n for i in range(m)]
+    score_matrix[0] = [i*gap_cost for i in score_matrix[0]] 
+    #print(n,m)
+    #Columns [1:n] seq 0 - j
+    #Rows [1:m] seq 1 - i
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-                score_matrix[i][j] = min(score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][i-1])][alphabet.index(sequences[1][j-1])],
+                score_matrix[i][j] = min(score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][j-1])][alphabet.index(sequences[1][i-1])],
                                          score_matrix[i-1][j] + gap_cost,
                                          score_matrix[i][j-1] + gap_cost)
     #print(sequences[0])
     #print(sequences[1])
     #print(np.array(score_matrix)) #Convert to numpy just to view it pretty in terminal
     if backtracking:
-        alignment = backtrack_from_score_matrix(n,m,sequences, score_matrix, cost_matrix, gapcost)
+        alignment = backtrack_from_score_matrix(m,n,sequences, score_matrix, cost_matrix, gap_cost)
         return score_matrix, alignment
     else:
         return score_matrix, ["", ""]
@@ -106,13 +111,16 @@ def write_alignment_in_fasta(alignment: list, filename: str):
         f.writelines([">seq1\n", alignment[0]+'\n', "\n", ">seq2\n", alignment[1]+'\n'])
 
 
-filename = "test1.fasta"
-gapcost, alphabet, cost_matrix = read_cost_matrix_and_gap_cost('cost_matrix.txt')
-sequences = read_fasta(filename)
+tests_directory = 'tests/'
+filename = "test4.fasta"
+cost_matrix_filename = 'cost_matrix.txt'
+gapcost, alphabet, cost_matrix = read_cost_matrix_and_gap_cost(tests_directory + cost_matrix_filename)
+sequences = read_fasta(tests_directory + filename)
 backtracking = True
 check_sequences_validity(sequences, alphabet)
 score_matrix, alignment = global_linear(sequences, alphabet, cost_matrix, gapcost, backtracking)
-print(np.array(score_matrix))
+#print(np.array(score_matrix))
+print(f"The cost of a global alignment is {score_matrix[-1][-1]}")
 
 print(">seq1")
 print(alignment[0])
@@ -120,3 +128,4 @@ print(alignment[0])
 print()
 print(">seq2")
 print(alignment[1])
+write_alignment_in_fasta(alignment, tests_directory + "output_" + filename)
