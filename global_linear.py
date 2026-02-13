@@ -1,4 +1,6 @@
 from Bio import SeqIO
+from Bio.Seq import Seq           
+from Bio.SeqRecord import SeqRecord
 import numpy as np
 
 def read_fasta(filename: str, num_sequences: int = 2):
@@ -50,6 +52,18 @@ def check_sequences_validity(sequences, alphabet):
             if site not in alphabet:
                 raise Exception(f"'{site}' of sequence {i} is not part of the defined alphabet {alphabet}")
 
+#Faster implementatino if we want to use it
+#def check_sequences_validity(sequences, alphabet):
+    """
+    Function to check the validity of all the sequences
+    Verify that they don't have characters outside of our alphabet   
+    """
+    alphabet_set = set(alphabet)
+    for i, sequence in enumerate(sequences):
+        invalid_chars = set(sequence) - alphabet_set
+        if invalid_chars:
+            raise Exception(f"Sequence {i+1} contains invalid characters: {invalid_chars}")
+
 def backtrack_from_score_matrix(i: int, j: int, sequences: list, score_matrix: list, cost_matrix: list, gapcost: int, alignment1: str = '', alignment2: str = ''):
     #print(i,j)
     if i > 0 and j > 0 and score_matrix[i][j] == score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][j-1])][alphabet.index(sequences[1][i-1])]:
@@ -66,7 +80,7 @@ def backtrack_from_score_matrix(i: int, j: int, sequences: list, score_matrix: l
         return backtrack_from_score_matrix(i, j-1, sequences, score_matrix, cost_matrix, gapcost, alignment1, alignment2)
     return alignment1[::-1], alignment2[::-1] #The alignments were filled from back to front, so we must invert the string of each
 
-
+#Woudn't be easier instead of using "alphabet.index()" used predefined dictionary mapping = {'A': 0, 'C': 1, 'G': 2, 'T': 3}?
 def global_linear(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int, backtracking: bool = False):
     """
     Function to get the global pairwise alignment using linear gap cost
@@ -101,14 +115,26 @@ def global_linear(sequences: list, alphabet: list, cost_matrix: list, gap_cost: 
 
 def write_alignment_in_fasta(alignment: list, filename: str):
     """
-    Function to wirte the output alignment in a fasta file. Recieves:
-        - alignment: A list with the two sequences already aligned
+    Function to write the output alignment in a fasta file. Receives:
+        - alignment: a list with the two sequences already aligned
         - filename: the name of the file where we will write our output
     (I'm sure that there is a more elegant way of doing this, but I don't know if I want to look at it)
     """
     print(filename)
     with open(filename, "w") as f:
         f.writelines([">seq1\n", alignment[0]+'\n', "\n", ">seq2\n", alignment[1]+'\n'])
+
+#"more elegant" way if we want
+def write_alignment_in_fasta(alignment: list, filename: str):
+    """
+    Function to write the output alignment in a fasta file. Receives:
+        - alignment: a list with the two sequences already aligned
+        - filename: the name of the file where we will write our output
+    """
+    record1 = SeqRecord(Seq(alignment[0]), id="seq1", description="aligned")
+    record2 = SeqRecord(Seq(alignment[1]), id="seq2", description="aligned")
+    with open(filename, "w") as f:
+        SeqIO.write([record1, record2], f, "fasta")
 
 
 tests_directory = 'tests/'
