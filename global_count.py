@@ -1,5 +1,6 @@
 import numpy as np
-from global_linear import global_linear, read_fasta, read_cost_matrix_and_gap_cost, check_sequences_validity
+from alignment_utils import * 
+from global_linear import *
 
 def global_count(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int):
     """
@@ -12,10 +13,8 @@ def global_count(sequences: list, alphabet: list, cost_matrix: list, gap_cost: i
     """
     n = len(sequences[0])
     m = len(sequences[1])  
-    score_matrix, _ = global_linear(sequences, alphabet, cost_matrix, gap_cost)
+    score_matrix, _ = global_linear(sequences, alphabet, cost_matrix, gap_cost, backtracking=False)
     count_matrix = np.zeros((m + 1, n + 1), dtype=int)
-    
-    # Initialization
     count_matrix[0, :] = 1
     count_matrix[:, 0] = 1
     
@@ -34,12 +33,15 @@ def global_count(sequences: list, alphabet: list, cost_matrix: list, gap_cost: i
                 
     return count_matrix[m][n]    
             
-tests_directory = 'tests/'
-filename = "test3.fasta"
-cost_matrix_filename = 'cost_matrix.txt'
-gapcost, alphabet, cost_matrix = read_cost_matrix_and_gap_cost(tests_directory + cost_matrix_filename)
-sequences = read_fasta(tests_directory + filename)
-check_sequences_validity(sequences, alphabet)
-total_count = global_count(sequences, alphabet, cost_matrix, gapcost)
-print(f"There are {total_count} possible optimal alignments.")
+            
+if __name__ == "__main__":
+    tests_directory = 'tests/'
+    filename = "test1.fasta"
+    cost_matrix_filename = 'cost_matrix.txt'
+    gapcost, alphabet, cost_matrix = read_cost_matrix(tests_directory + cost_matrix_filename)
+    sequences = read_fasta(tests_directory + filename)
+    check_sequences_validity(sequences, alphabet)
+    
+    total_count = global_count(sequences, alphabet, cost_matrix, gapcost)
+    print(f"There are {total_count} possible optimal alignments.")
 
