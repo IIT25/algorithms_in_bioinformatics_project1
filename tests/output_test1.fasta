@@ -1,5 +1,4 @@
->seq1
+>seq1 align
 acgt-gtcaacgt
-
->seq2
+>seq2 align
 acgtcgt-agcta
