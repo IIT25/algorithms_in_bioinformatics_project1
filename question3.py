@@ -20,4 +20,3 @@ print(">seq1")
 print(alignment[0])
 print(">seq2")
 print(alignment[1])
-#do we need to print all possible alignments ?? 
