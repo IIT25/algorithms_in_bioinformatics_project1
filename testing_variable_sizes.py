@@ -39,6 +39,6 @@ for length in sequence_length:
         t_n.append(t1-t0)
 
 final_result = {"size": n, "time": t_n}
-filehandler = open("result.pkl","wb")
+filehandler = open("tests/result.pkl","wb")
 pickle.dump(final_result,filehandler)
 filehandler.close()
