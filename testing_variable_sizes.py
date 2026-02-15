@@ -1,10 +1,8 @@
 from alignment_utils import *
 from global_linear import *
 import numpy as np
-import sys
 from time import time
 import pickle
-sys.setrecursionlimit(10**9)
 
 def generate_random_sequences(n: int, alphabet: list):
     """
