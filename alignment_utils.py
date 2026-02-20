@@ -25,10 +25,11 @@ def check_sequences_validity(sequences: list, alphabet: list):
 def read_cost_matrix(filename: str):
     """
     Function to read a file with the cost matrix and the gapcost, 
+    for this project we will assume that we have only affine gap cost functions
     The input file must be a .txt file formated as follow:
     1 line:
-    n g
-    where n is the size of the alphabet and g is the linear gapcost
+    n a b
+    where n is the size of the alphabet and a and b are the parameters of the affine gapcost a+b*k
 
     next n lines:
     letter cost1 cost2 ... costn
@@ -39,14 +40,14 @@ def read_cost_matrix(filename: str):
     """
     with open(filename) as f:
         lines = f.readlines()
-        n, gapcost = map(int,lines[0].split(' '))
+        n, a, b = map(int,lines[0].split(' '))
         alphabet = []
         cost_matrix = []
         for i in range(1, n+1):
             line = lines[i].split(' ')
             alphabet.append(line[0])
             cost_matrix.append(list(map(int, line[1:])))
-    return gapcost, alphabet, cost_matrix
+    return [a,b], alphabet, cost_matrix
     
 def write_alignment_in_fasta(alignment: list, filename: str):
     """
