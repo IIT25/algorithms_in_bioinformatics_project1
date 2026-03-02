@@ -1,23 +1,11 @@
 import numpy as np    
 from alignment_utils import *
 
-def affine_gapcost(k, a, b):
-    """
-    Function implementing the affine gapcost. It recieves
-        - k: The length of the gap
-        - a: affine cost parameter
-        - b: affine cost parameter
-    And returns the affine cost a+b*k
-    """
-    if k == 0:
-        return 0
-    return a+b*k
-
 def backtrack_from_score_matrix(sequences: list, alphabet: list, score_matrix: list, cost_matrix: list, gapcost: int, gapcost_params):
     """
     This function implements an iterative backtracking for general gapcost functions in cubic time
     To do so, it looks first for replacements and then evaluates gaps going up or to the left in the score matrix
-    It recieves:
+    It receives:
     
         - sequences: The two sequences to be aligned
         - alphabet: a list of the current alphabet, aligned with the index of the cost matrix
@@ -62,7 +50,7 @@ def backtrack_from_score_matrix(sequences: list, alphabet: list, score_matrix: l
 def global_general_alignment(sequences: list, alphabet: list, cost_matrix: list, gap_cost, gapcost_params: list, backtracking: bool = False):
     """
     Function to get the global pairwise alignment using linear gap cost
-    It recieves:
+    It receives:
         - sequences: a list of two sequences that we want to align
         - alphabet: a list of the current alphabet, aligned with the index of the cost matrix
         - cost_matrix: a matrix with the scores of each substitution
@@ -90,18 +78,16 @@ def global_general_alignment(sequences: list, alphabet: list, cost_matrix: list,
     else:
         return score_matrix, ["", ""]
 
+if __name__ == "__main__":
+    tests_directory = 'tests/'
+    filename = "test3.fasta"
+    cost_matrix_filename = 'cost_matrix.txt'
+    gapcost_params, alphabet, cost_matrix = read_cost_matrix(tests_directory + cost_matrix_filename)
+    gap_cost = affine_gapcost
+    sequences = read_fasta(tests_directory + filename)
+    backtracking = True
+    check_sequences_validity(sequences, alphabet)
+    score_matrix, alignment = global_general_alignment(sequences, alphabet, cost_matrix, gap_cost, gapcost_params, backtracking)
 
-tests_directory = 'tests/'
-filename = "test4.fasta"
-cost_matrix_filename = 'cost_matrix.txt'
-gapcost_params, alphabet, cost_matrix = read_cost_matrix(tests_directory + cost_matrix_filename)
-gap_cost = affine_gapcost
-sequences = read_fasta(tests_directory + filename)
-backtracking = True
-check_sequences_validity(sequences, alphabet)
-score_matrix, alignment = global_general_alignment(sequences, alphabet, cost_matrix, gap_cost, gapcost_params, backtracking)
-
-print(f"The cost of a global alignment is {score_matrix[-1][-1]}")
-write_alignment_in_fasta(alignment, tests_directory + "output_" + filename)
-
-print(alignment)
+    print(f"The cost of a global alignment is {score_matrix[-1][-1]}")
+    write_alignment_in_fasta(alignment, tests_directory + "output_" + filename)
