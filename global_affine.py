@@ -134,4 +134,4 @@ if __name__ == "__main__":
     score_matrix, alignment = global_affine_alignment(sequences, alphabet, cost_matrix, a, b, backtracking)
     
     print(f"The cost of a global alignment is {score_matrix[-1][-1]}")
-    write_alignment_in_fasta(alignment, tests_directory + "output_" + filename)
+    write_alignment_in_fasta(alignment, tests_directory + "output_affine_" + filename)

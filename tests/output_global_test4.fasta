@@ -1,0 +1,10 @@
+>seq1 align
+ggcctaaaggcgccggtctttcgtaccccaaaatctcggcattttaagataagtgagtgt
+tgcgttacactagcgatctaccgcgtcttatacttaagcgtatgcccagatctgactaat
+cgtgcccccggattagacgggcttgatgggaaagaacagctcgtc------tgtttacgt
+ataaacagaatcgcctgggttcgc
+>seq2 align
+gggctaaaggttagggtctttcacactaaagagtggt-gcgtatcgtggctaatgtaccg
+cttctggtatc-gtggcttacggc--cagacctacaagtactagacctga--gaactaat
+cttgtcgagccttccattgagggtaatgggagagaacatcgagtcagaagttattcttgt
+ttacgtagaatcgcctgggtccgc

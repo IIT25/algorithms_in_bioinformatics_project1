@@ -1,6 +1,11 @@
 import numpy as np    
 from alignment_utils import *
 
+def affine_gapcost(k: int, a: int, b:int):
+    if k == 0:
+        return 0
+    return a + b * k
+
 def backtrack_from_score_matrix(sequences: list, alphabet: list, score_matrix: list, cost_matrix: list, gapcost: int, gapcost_params):
     """
     This function implements an iterative backtracking for general gapcost functions in cubic time
@@ -34,11 +39,11 @@ def backtrack_from_score_matrix(sequences: list, alphabet: list, score_matrix: l
             while 1:
                 if i >= k and score_matrix[i][j] == score_matrix[i-k][j] + gapcost(k, *gapcost_params):
                     alignment1 += "-"*k
-                    alignment2 += sequences[1][i-k:i]
+                    alignment2 += sequences[1][i-1: i-k-1: -1]
                     i -= k
                     break
                 elif j >= k and score_matrix[i][j] == score_matrix[i][j-k] + gapcost(k, *gapcost_params):
-                    alignment1 += sequences[0][j-k: j]
+                    alignment1 += sequences[0][j-1: j-k-1: -1]
                     alignment2 += '-'*k
                     j -= k
                     break
@@ -80,7 +85,7 @@ def global_general_alignment(sequences: list, alphabet: list, cost_matrix: list,
 
 if __name__ == "__main__":
     tests_directory = 'tests/'
-    filename = "test3.fasta"
+    filename = "test4.fasta"
     cost_matrix_filename = 'cost_matrix.txt'
     gapcost_params, alphabet, cost_matrix = read_cost_matrix(tests_directory + cost_matrix_filename)
     gap_cost = affine_gapcost
@@ -90,4 +95,4 @@ if __name__ == "__main__":
     score_matrix, alignment = global_general_alignment(sequences, alphabet, cost_matrix, gap_cost, gapcost_params, backtracking)
 
     print(f"The cost of a global alignment is {score_matrix[-1][-1]}")
-    write_alignment_in_fasta(alignment, tests_directory + "output_" + filename)
+    write_alignment_in_fasta(alignment, tests_directory + "output_global_" + filename)
