@@ -34,23 +34,24 @@ gapcost_params, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_m
 a, b = gapcost_params
 gapcost = affine_gapcost
 backtracking = False
+sequence_length = range(2,300,5)
 
-#for length in sequence_length:
-#    for _ in range(5):
-#        sequences = generate_random_sequences(length, alphabet)
-#        t0 = time()
-#        score_matrix, alignment = global_general_alignment(sequences, alphabet, cost_matrix, gapcost, gapcost_params, backtracking)
-#        t1 = time()
-#        print(f"time taken for general gaspcost function for input of size {length}: {t1-t0}")
-#        time_general.append(t1-t0)
-#        n.append(length)
+for length in sequence_length:
+   for _ in range(5):
+       sequences = generate_random_sequences(length, alphabet)
+       t0 = time()
+       score_matrix, alignment = global_general_alignment(sequences, alphabet, cost_matrix, gapcost, gapcost_params, backtracking)
+       t1 = time()
+       print(f"time taken for general gaspcost function for input of size {length}: {t1-t0}")
+       time_general.append(t1-t0)
+       n.append(length)
 
 
 
-#final_result = {"size": n, "time_general": time_general}
-#filehandler = open("tests/result_general.pkl","wb")
-#pickle.dump(final_result,filehandler)
-#filehandler.close()
+final_result = {"size": n, "time_general": time_general}
+filehandler = open("tests/result_general.pkl","wb")
+pickle.dump(final_result,filehandler)
+filehandler.close()
 
 
 sequence_length = range(2,1000,5)
