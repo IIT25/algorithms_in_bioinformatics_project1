@@ -11,10 +11,9 @@ gapcost_params, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_m
 a, b = gapcost_params
 gapcost = affine_gapcost
 
-sequences = []
-for i in range(1, 3):
-    seq_from_file = read_fasta(eval_directory + "seq" + str(i) + ".fasta", 1)
-    sequences.append(seq_from_file[0])
+
+sequences = read_fasta(eval_directory + "q1.fasta", 2)
+
 check_sequences_validity(sequences, alphabet)
 
 print("Global general function")

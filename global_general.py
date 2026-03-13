@@ -54,7 +54,7 @@ def backtrack_from_score_matrix(sequences: list, alphabet: list, score_matrix: l
 
 def global_general_alignment(sequences: list, alphabet: list, cost_matrix: list, gap_cost, gapcost_params: list, backtracking: bool = False):
     """
-    Function to get the global pairwise alignment using linear gap cost
+    Function to get the global pairwise alignment using general gap cost
     It receives:
         - sequences: a list of two sequences that we want to align
         - alphabet: a list of the current alphabet, aligned with the index of the cost matrix

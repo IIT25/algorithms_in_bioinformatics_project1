@@ -25,11 +25,7 @@ if __name__ == "__main__":
     cost_matrix_filename = 'cost_matrix.txt'
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
     a, b = gapcost
-    sequences = []
-    for i in range(1, 6):
-        seq_from_file = read_fasta(eval_directory + "seq" + str(i) + ".fasta", 1)
-        sequences.append(seq_from_file[0])
-        
+    sequences = read_fasta(eval_directory + "q1.fasta", 6)
     check_sequences_validity(sequences, alphabet)
     result = compute_optimal_score(sequences, alphabet, cost_matrix, gapcost)
     for row in result:
