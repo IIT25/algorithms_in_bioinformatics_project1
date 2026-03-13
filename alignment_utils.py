@@ -3,11 +3,12 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 def read_fasta(filename: str, num_sequences: int = 2):
-    sequences = []
+    sequences = {}
     with open(filename) as handle:
         for i, record in enumerate(SeqIO.parse(handle, "fasta")):
             if i < num_sequences:
-                sequences.append(record.seq)
+                
+                sequences[record.name] = record.seq
     return sequences
        
 def check_sequences_validity(sequences: list, alphabet: list):
@@ -48,13 +49,15 @@ def read_cost_matrix(filename: str):
             cost_matrix.append(list(map(int, line[1:])))
     return gapcost, alphabet, cost_matrix
     
-def write_alignment_in_fasta(alignment: list, filename: str):
+def write_alignment_in_fasta(alignment: list, filename: str, sequence_names: list = []):
     """
     Function to write the output alignment in a fasta file. Receives:
         - alignment: a list with the two sequences already aligned
         - filename: the name of the file where we will write our output
     """
-    record1 = SeqRecord(Seq(alignment[0]), id="seq1", description="align")
-    record2 = SeqRecord(Seq(alignment[1]), id="seq2", description="align")
+    if sequence_names == []:
+        records = [SeqRecord(Seq(alignment[i]), id=f"seq{i}", description="align") for i in range(len(alignment))]
+    else:
+        records = [SeqRecord(Seq(alignment[i]), id=sequence_names[i], description="align") for i in range(len(alignment))]
     with open(filename, "w") as f:
-        SeqIO.write([record1, record2], f, "fasta")
+        SeqIO.write(records, f, "fasta")

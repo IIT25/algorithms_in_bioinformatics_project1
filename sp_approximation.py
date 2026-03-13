@@ -72,23 +72,41 @@ def merge_alignments(multiple_alignment, pairwise_alignment):
     i = 0 
     j = 0
     final_multiple_alignment = [[] for _ in range(k+1)]
+    # print("multiple")
+    # for i in range(len(multiple_alignment)):
+    #     print("".join(multiple_alignment[i]))
+
+    # print("pairwise")
+    # for i in range(len(pairwise_alignment)):
+    #     print("".join(pairwise_alignment[i]))
+
+    # print(pairwise_alignment[0])
+    # print(multiple_alignment[0])
+    # i = 0
     while i < n or j < m:
         if multiple_alignment[0][i] == pairwise_alignment[0][j]:
+            # print(i,j, multiple_alignment[0][i],pairwise_alignment[0][j], "case 1")
             for l in range(k):
                 final_multiple_alignment[l].append(multiple_alignment[l][i])
             final_multiple_alignment[-1].append(pairwise_alignment[-1][j])
             i+=1
             j+=1
         elif multiple_alignment[0][i] == '-':
+            # print(i,j,multiple_alignment[0][i],pairwise_alignment[0][j], "case 2")
             for l in range(k):
                 final_multiple_alignment[l].append(multiple_alignment[l][i])
             final_multiple_alignment[-1].append('-')
             i+=1
         else:
+            # print(i,j,multiple_alignment[0][i],pairwise_alignment[0][j], "case 3")
             for l in range(k):
                 final_multiple_alignment[l].append('-')
             final_multiple_alignment[-1].append(pairwise_alignment[-1][j])
             j+=1
+    # print("joint")
+    # for i in range(len(final_multiple_alignment)):
+    #     print("".join(final_multiple_alignment[i]))
+    # print()
     return final_multiple_alignment
 
 def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
@@ -98,42 +116,35 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     and then running a pairwise alignment of the central string to every other string
 
     It recieves:
-        - sequences: A list containing all the sequences to be aligned
+        - sequences: A dictionary containing all the sequences to be aligned, the structure is {name: sequence}
         - alphabet: a list of the current alphabet, aligned with the index of the cost matrix
         - cost_matrix: a matrix with the scores of each substitution
         - gap_cost: an integer representing the gap cost on the alignment
     """
-    result = compute_optimal_score(sequences, alphabet, cost_matrix, gap_cost)
+    names = list(sequences.keys())
+    sequences_list = [sequences[i] for i in names]
+    result = compute_optimal_score(sequences_list, alphabet, cost_matrix, gap_cost)
     central_sequence = np.argmax(result.sum(axis = 0))
+    order = [names[central_sequence]]
     multiple_alignment = []
-    for i in range(len(sequences)):
+    for i in range(len(sequences_list)):
         if i != central_sequence:
-            _, pairwise_alignment = global_linear([sequences[central_sequence], sequences[i]], alphabet, cost_matrix, gap_cost, True)
+            _, pairwise_alignment = global_linear([sequences_list[central_sequence], sequences_list[i]], alphabet, cost_matrix, gap_cost, True)
             multiple_alignment = merge_alignments(multiple_alignment, pairwise_alignment)
+            order.append(names[i])
     for i in range(len(multiple_alignment)):
         multiple_alignment[i] = "".join(multiple_alignment[i])
-    
-    return multiple_alignment
+    return multiple_alignment, order
 
 if __name__ == "__main__":
-    eval_directory = "eval/"
-    cost_matrix_filename = 'cost_matrix.txt'
+    eval_directory = "tests/"
+    filename = "brca1-testseqs.fasta"
+    cost_matrix_filename = 'cost_matrix_capital.txt'
+    sequences = read_fasta(eval_directory+filename, num_sequences=8)
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
-    sequences = []
-    for i in range(1, 6):
-        seq_from_file = read_fasta(eval_directory + "seq" + str(i) + ".fasta", 1)
-        sequences.append(seq_from_file[0])
-        
-    check_sequences_validity(sequences, alphabet)
-    multiple_alignment = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
+    check_sequences_validity(sequences.values(), alphabet)
+    multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
     for row in multiple_alignment:
         print(row)
 
-    sequences = read_fasta("tests/brca1-testseqs.fasta", num_sequences=8)
-    eval_directory = "tests/"
-    cost_matrix_filename = 'cost_matrix_capital.txt'
-    gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
-    check_sequences_validity(sequences, alphabet)
-    multiple_alignment = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
-    for row in multiple_alignment:
-        print(row)
+    write_alignment_in_fasta(multiple_alignment, eval_directory + "output_" + filename, sequence_names)
