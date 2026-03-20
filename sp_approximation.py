@@ -83,15 +83,16 @@ def merge_alignments(multiple_alignment, pairwise_alignment):
     # print(pairwise_alignment[0])
     # print(multiple_alignment[0])
     # i = 0
+    
     while i < n or j < m:
-        if multiple_alignment[0][i] == pairwise_alignment[0][j]:
+        if i < n and j < m and multiple_alignment[0][i] == pairwise_alignment[0][j]:
             # print(i,j, multiple_alignment[0][i],pairwise_alignment[0][j], "case 1")
             for l in range(k):
                 final_multiple_alignment[l].append(multiple_alignment[l][i])
             final_multiple_alignment[-1].append(pairwise_alignment[-1][j])
             i+=1
             j+=1
-        elif multiple_alignment[0][i] == '-':
+        elif i < n and multiple_alignment[0][i] == '-':
             # print(i,j,multiple_alignment[0][i],pairwise_alignment[0][j], "case 2")
             for l in range(k):
                 final_multiple_alignment[l].append(multiple_alignment[l][i])
@@ -137,8 +138,8 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     return multiple_alignment, order
 
 if __name__ == "__main__":
-    eval_directory = "tests/"
-    filename = "brca1-testseqs.fasta"
+    eval_directory = "full_seq_alignment/"
+    filename = "bcra1-full_AA.fasta"
     cost_matrix_filename = 'cost_matrix_capital.txt'
     sequences = read_fasta(eval_directory+filename, num_sequences=8)
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
