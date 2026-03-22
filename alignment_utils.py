@@ -50,17 +50,20 @@ def read_cost_matrix(filename: str):
             cost_matrix.append(list(map(int, line[1:])))
     return gapcost, alphabet, cost_matrix
     
-def write_alignment_in_fasta(alignment: list, filename: str, sequence_names: list = []):
+def write_alignment_in_fasta(alignment: list, filename: str, sequence_names: list = [], comment: str = ""):
     """
     Function to write the output alignment in a fasta file. Receives:
         - alignment: a list with the two sequences already aligned
         - filename: the name of the file where we will write our output
+        - sequence_names: A list with the names of the sequences to be inserted in the file
     """
     if sequence_names == []:
         records = [SeqRecord(Seq(alignment[i]), id=f"seq{i}", description="align") for i in range(len(alignment))]
     else:
         records = [SeqRecord(Seq(alignment[i]), id=sequence_names[i], description="align") for i in range(len(alignment))]
     with open(filename, "w") as f:
+        if comment:
+            f.write(f"; {comment}\n")
         SeqIO.write(records, f, "fasta")
 
 #Handlers for unknown characters in the sequences
