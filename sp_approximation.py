@@ -47,6 +47,7 @@ def compute_optimal_score(sequences: list, alphabet: list, cost_matrix: list, ga
     result = np.zeros((n,n))
     for i in range(n):
         for j in range(i, n):
+            print("aligning", i , j)
             score_mat, _ = global_linear([sequences[i], sequences[j]], alphabet, cost_matrix, gap_cost)
             score = score_mat[-1][-1]
             result[i][j] = score
@@ -129,6 +130,7 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     order = [names[central_sequence]]
     multiple_alignment = []
     for i in range(len(sequences_list)):
+        print(i)
         if i != central_sequence:
             _, pairwise_alignment = global_linear([sequences_list[central_sequence], sequences_list[i]], alphabet, cost_matrix, gap_cost, True)
             multiple_alignment = merge_alignments(multiple_alignment, pairwise_alignment)
@@ -138,14 +140,14 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     return multiple_alignment, order
 
 if __name__ == "__main__":
-    eval_directory = "full_seq_alignment/"
-    filename = "bcra1-full_AA.fasta"
+    eval_directory = "full_seq_alignment"
     cost_matrix_filename = 'cost_matrix_capital.txt'
-    sequences = read_fasta(eval_directory+filename, num_sequences=8)
-    gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
-    check_sequences_validity(sequences.values(), alphabet)
-    multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
-    for row in multiple_alignment:
-        print(row)
+    gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + '/' +cost_matrix_filename)
+    for i in range(1,129):
+        filename = f"brca1-full_{i}.fasta"
+        sequences = read_fasta(eval_directory+'/'+filename, num_sequences=8)
+        check_sequences_validity(sequences.values(), alphabet)
+        multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
+        print(i)
 
-    write_alignment_in_fasta(multiple_alignment, eval_directory + "output_" + filename, sequence_names)
+        write_alignment_in_fasta(multiple_alignment, eval_directory + "output/output_" + filename, sequence_names)
