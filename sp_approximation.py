@@ -1,5 +1,7 @@
 import numpy as np    
 from alignment_utils import *
+import sys
+sys.setrecursionlimit(100000) 
 
 def backtrack_from_score_matrix(i: int, j: int, sequences: list, score_matrix: list, cost_matrix: list, gapcost: int, alphabet: list, alignment1: str = '', alignment2: str = ''):
     if i > 0 and j > 0 and score_matrix[i][j] == score_matrix[i-1][j-1] + cost_matrix[alphabet.index(sequences[0][j-1])][alphabet.index(sequences[1][i-1])]:
@@ -130,7 +132,6 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     order = [names[central_sequence]]
     multiple_alignment = []
     for i in range(len(sequences_list)):
-        print(i)
         if i != central_sequence:
             _, pairwise_alignment = global_linear([sequences_list[central_sequence], sequences_list[i]], alphabet, cost_matrix, gap_cost, True)
             multiple_alignment = merge_alignments(multiple_alignment, pairwise_alignment)
@@ -140,14 +141,13 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     return multiple_alignment, order
 
 if __name__ == "__main__":
-    eval_directory = "full_seq_alignment"
+    eval_directory = "tests/"
     cost_matrix_filename = 'cost_matrix_capital.txt'
-    gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + '/' +cost_matrix_filename)
-    for i in range(1,129):
-        filename = f"brca1-full_{i}.fasta"
-        sequences = read_fasta(eval_directory+'/'+filename, num_sequences=8)
-        check_sequences_validity(sequences.values(), alphabet)
-        multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
-        print(i)
+    gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory +cost_matrix_filename)
+    
+    filename = f"testdata_long.txt"
+    sequences = read_fasta(eval_directory+filename, num_sequences=8)
+    check_sequences_validity(sequences.values(), alphabet)
 
-        write_alignment_in_fasta(multiple_alignment, eval_directory + "output/output_" + filename, sequence_names)
+    multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
+    write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_" + filename, sequence_names)
