@@ -49,7 +49,6 @@ def compute_optimal_score(sequences: list, alphabet: list, cost_matrix: list, ga
     result = np.zeros((n,n))
     for i in range(n):
         for j in range(i, n):
-            print("aligning", i , j)
             score_mat, _ = global_linear([sequences[i], sequences[j]], alphabet, cost_matrix, gap_cost)
             score = score_mat[-1][-1]
             result[i][j] = score
@@ -129,6 +128,7 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     sequences_list = [sequences[i] for i in names]
     result = compute_optimal_score(sequences_list, alphabet, cost_matrix, gap_cost)
     central_sequence = np.argmax(result.sum(axis = 0))
+    print(f"The sequence selected as central is index {central_sequence} corresponding to {names[central_sequence]}")
     order = [names[central_sequence]]
     multiple_alignment = []
     for i in range(len(sequences_list)):
