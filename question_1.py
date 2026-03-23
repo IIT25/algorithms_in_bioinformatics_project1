@@ -11,7 +11,7 @@ if __name__ == "__main__":
     sequence_names = list(sequences.keys())
     check_sequences_validity(sequences.values(), alphabet)
     score_matrix, alignment = sp_exact_3(sequences, alphabet, cost_matrix, gapcost, True)
-    print(score_matrix[-1][-1][-1])
+    print(score_matrix[-1][-1][-1]) # score is 790
     for row in alignment:
         print("".join(row))
     write_alignment_in_fasta(alignment, eval_directory + "exact_output_question_1.fasta", sequence_names)

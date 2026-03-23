@@ -1,7 +1,6 @@
 import numpy as np    
 from alignment_utils import *
 
-
 def backtrack(seq1: str, seq2: str, seq3: str,  score_matrix: list, cost_matrix: list, gap_cost: int, alphabet: list):
     i, j, k = len(seq1), len(seq2), len(seq3)
     align1, align2, align3 = "", "", ""
@@ -85,7 +84,7 @@ def sp_exact_3(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int
     n = len(A) 
     m = len(B)
     o = len(C)
-    score_matrix = np.zeros((n+1, m+1, o+1))
+    score_matrix = np.zeros((n+1, m+1, o+1), dtype=int)
 
     for i in range(n+1):
         for j in range(m+1):
@@ -128,13 +127,15 @@ def sp_exact_3(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int
 
 if __name__ == "__main__":
     eval_directory = "tests/"
-    filename = "testdata_short.fasta"
+    filename = "testdata_long.fasta"
     cost_matrix_filename = 'cost_matrix_capital.txt'
     sequences = read_fasta(eval_directory+filename, num_sequences=3)
+    sequence_names = list(sequences.keys())
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
     check_sequences_validity(sequences.values(), alphabet)
     score_matrix, alignment = sp_exact_3(sequences, alphabet, cost_matrix, gapcost, True)
+    
     print(score_matrix[-1][-1][-1])
     for row in alignment:
-        print("".join(row))
-    write_alignment_in_fasta(alignment, eval_directory + "output_" + filename)
+        print(row)
+    write_alignment_in_fasta(alignment, eval_directory + "output_" + filename, sequence_names)
