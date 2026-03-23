@@ -77,9 +77,11 @@ def sp_exact_3(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int
         - gap_cost: an integer representing the gap cost on the alignment
         - backtracking: a boolean variable to return an optimal alignment using backtracking, if desired 
     """
-    A = sequences["seq1"]
-    B = sequences["seq2"]
-    C = sequences["seq3"]
+    names = list(sequences.keys())
+    
+    A = sequences[names[0]]
+    B = sequences[names[1]]
+    C = sequences[names[2]]
     n = len(A) 
     m = len(B)
     o = len(C)
@@ -126,7 +128,7 @@ def sp_exact_3(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int
 
 if __name__ == "__main__":
     eval_directory = "tests/"
-    filename = "testdata_long.fasta"
+    filename = "testdata_short.fasta"
     cost_matrix_filename = 'cost_matrix_capital.txt'
     sequences = read_fasta(eval_directory+filename, num_sequences=3)
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
