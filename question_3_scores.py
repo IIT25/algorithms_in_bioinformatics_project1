@@ -17,18 +17,12 @@ if __name__ == "__main__":
     for i in sizes:
         approximation_scores.append(compute_sp_score(eval_directory + f"approximation_output_testseqs_{i}_3.fasta"))
 
-        filename = f"testseqs_{i}_3.fasta"
-        sequences = read_fasta(eval_directory+filename, num_sequences=3)
-        check_sequences_validity(sequences.values(), alphabet)
-        score_matrix, alignment = sp_exact_3(sequences, alphabet, cost_matrix, gapcost)
-        score = score_matrix[-1][-1][-1]
-        exact_scores.append(score)
-        #print(score)
+        exact_scores.append(compute_sp_score(eval_directory + f"exact_output_testseqs_{i}_3.fasta"))
         
-    #print(exact_scores)
-    #print(approximation_scores_scores)
+    print(exact_scores)
+    print(approximation_scores)
     
-    plt.plot(sizes,approximation_scores)
+    plt.plot(sizes,np.array(approximation_scores) / np.array(exact_scores))
     plt.show()
-    print(approximation_scores)    
+      
     

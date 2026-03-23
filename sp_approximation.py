@@ -127,7 +127,7 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     names = list(sequences.keys())
     sequences_list = [sequences[i] for i in names]
     result = compute_optimal_score(sequences_list, alphabet, cost_matrix, gap_cost)
-    central_sequence = np.argmax(result.sum(axis = 0))
+    central_sequence = np.argmin(result.sum(axis = 0))
     print(f"The sequence selected as central is index {central_sequence} corresponding to {names[central_sequence]}")
     order = [names[central_sequence]]
     multiple_alignment = []

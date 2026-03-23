@@ -16,4 +16,4 @@ if __name__ == "__main__":
     end_time = time.time()
 
     write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_question_2.fasta" , sequence_names)
-    #The cost of this alignment after looking at it with the msa_sp_score_3k.py is 4384
+    #The cost of this alignment after looking at it with the msa_sp_score_3k.py is 3290

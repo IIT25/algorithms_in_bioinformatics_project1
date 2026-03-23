@@ -1,5 +1,6 @@
 from alignment_utils import *
 from sp_approximation import *
+from sp_exact_3 import *
 import time
 
 if __name__ == "__main__":
@@ -17,3 +18,10 @@ if __name__ == "__main__":
         end_time = time.time()
 
         write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_"+filename , sequence_names, comment=f"time taken {end_time-start_time}")
+
+        start_time = time.time()
+        score_matrix, exact_alignment = sp_exact_3(sequences, alphabet, cost_matrix, gapcost, backtracking=True)
+        score = score_matrix[-1][-1][-1]
+        end_time = time.time()
+
+        write_alignment_in_fasta(exact_alignment, eval_directory + "exact_output_"+filename , sequence_names, comment=f"time taken {end_time-start_time}")
