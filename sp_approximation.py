@@ -1,5 +1,6 @@
 import numpy as np    
 from alignment_utils import *
+from time import time
 import sys
 sys.setrecursionlimit(100000) 
 
@@ -141,13 +142,14 @@ def two_sp_approximation(sequences, alphabet, cost_matrix, gap_cost):
     return multiple_alignment, order
 
 if __name__ == "__main__":
-    eval_directory = "tests/"
-    cost_matrix_filename = 'cost_matrix_capital.txt'
+    eval_directory = "presentation_sequences/"
+    cost_matrix_filename = 'cost_matrix.txt'
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory +cost_matrix_filename)
     
-    filename = f"testdata_long.txt"
+    filename = f"brca1-testseqs_1_6.fasta"
     sequences = read_fasta(eval_directory+filename, num_sequences=8)
     check_sequences_validity(sequences.values(), alphabet)
-
+    t_start = time()
     multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
-    write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_" + filename, sequence_names)
+    t_end = time()
+    write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_" + filename, sequence_names, comment=f"time taken {t_end-t_start}")
