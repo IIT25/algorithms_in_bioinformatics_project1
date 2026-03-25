@@ -1,5 +1,6 @@
 import numpy as np    
 from alignment_utils import *
+from time import time
 
 def backtrack(seq1: str, seq2: str, seq3: str,  score_matrix: list, cost_matrix: list, gap_cost: int, alphabet: list):
     i, j, k = len(seq1), len(seq2), len(seq3)
@@ -126,16 +127,18 @@ def sp_exact_3(sequences: list, alphabet: list, cost_matrix: list, gap_cost: int
         return score_matrix, ["", "", ""]
 
 if __name__ == "__main__":
-    eval_directory = "tests/"
-    filename = "testdata_long.fasta"
-    cost_matrix_filename = 'cost_matrix_capital.txt'
+    eval_directory = "presentation_sequences/"
+    filename = "brca1-testseqs_1_3.fasta"
+    cost_matrix_filename = 'cost_matrix.txt'
     sequences = read_fasta(eval_directory+filename, num_sequences=3)
     sequence_names = list(sequences.keys())
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory + cost_matrix_filename)
     check_sequences_validity(sequences.values(), alphabet)
+    t_start = time()
     score_matrix, alignment = sp_exact_3(sequences, alphabet, cost_matrix, gapcost, True)
+    t_end = time()
     
     print(score_matrix[-1][-1][-1])
     for row in alignment:
         print(row)
-    write_alignment_in_fasta(alignment, eval_directory + "output_" + filename, sequence_names)
+    write_alignment_in_fasta(alignment, eval_directory + "exact_output_" + filename, sequence_names, comment=f"time taken {t_end-t_start}")
