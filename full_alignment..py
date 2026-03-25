@@ -13,5 +13,7 @@ if __name__ == "__main__":
     sequences = read_fasta(eval_directory+filename, num_sequences=8)
     check_sequences_validity(sequences.values(), alphabet)
 
+    t_start = time()
     multiple_alignment, sequence_names = two_sp_approximation(sequences, alphabet, cost_matrix, gapcost)
-    write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_" + filename, sequence_names)
+    t_end = time()
+    write_alignment_in_fasta(multiple_alignment, eval_directory + "approximation_output_" + filename, sequence_names, comment=f"time taken {t_end-t_start}")

@@ -146,7 +146,7 @@ if __name__ == "__main__":
     cost_matrix_filename = 'cost_matrix.txt'
     gapcost, alphabet, cost_matrix = read_cost_matrix(eval_directory +cost_matrix_filename)
     
-    filename = f"brca1-testseqs_1_6.fasta"
+    filename = f"brca1-testseqs_1_4.fasta"
     sequences = read_fasta(eval_directory+filename, num_sequences=8)
     check_sequences_validity(sequences.values(), alphabet)
     t_start = time()
