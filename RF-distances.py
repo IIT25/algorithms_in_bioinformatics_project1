@@ -2,6 +2,7 @@ import os
 import io
 import sys
 from Bio import Phylo
+import pandas as pd
 
 file_names = os.listdir('neighbor_joining_results/')
 
@@ -98,9 +99,21 @@ def compare_trees(type1, type2, file_name):
     rfdist = num_of_nontrivial_splits - 2 * num_of_shared_nontrivial_splits
 
     print(f"RF Distance for {file_name}: {rfdist}")
+    return rfdist
 
+
+sizes = []
+nj_quick_distances = []
+nj_rapid_distances = []
+rapid_quick_distances = []
 for file_name in file_names:
-    #compare_trees(quicktree, NJ, file_name)
-    #compare_trees(quicktree, NJrapid, file_name)
-    compare_trees(NJrapid, NJ, file_name)
+    print(file_name)
+    size = int(file_name.split("_")[0])
+    sizes.append(size)
+    nj_quick_distances.append(compare_trees(quicktree, NJ, file_name))
+    rapid_quick_distances.append(compare_trees(quicktree, NJrapid, file_name))
+    nj_rapid_distances.append(compare_trees(NJrapid, NJ, file_name))
+
+results = pd.DataFrame({"n": sizes, "nj_vs_quick": nj_quick_distances, "nj_vs_rapid": nj_rapid_distances, "quick_vs_rapid": rapid_quick_distances})
+results.to_csv("RF-distances/rf_distances.csv", index = False)
 
