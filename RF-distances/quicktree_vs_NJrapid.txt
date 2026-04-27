@@ -1,0 +1,14 @@
+RF Distance for 494_Astro_capsid.nwk: 532
+RF Distance for 304_A1_Propeptide.nwk: 78
+RF Distance for 214_Arena_glycoprot.nwk: 56
+RF Distance for 608_Gemini_AL2.nwk: 20
+RF Distance for 1493_Fe-ADH.nwk: 92
+RF Distance for 877_Glu_synthase.nwk: 54
+RF Distance for 1689_FGGY_N.nwk: 102
+RF Distance for 777_Gemini_V1.nwk: 494
+RF Distance for 1347_FAINT.nwk: 2
+RF Distance for 401_DDE.nwk: 98
+RF Distance for 1756_FAD_binding_3.nwk: 76
+RF Distance for 89_Adeno_E3_CR1.nwk: 30
+RF Distance for 1849_FG-GAP.nwk: 280
+RF Distance for 1560_Ferritin.nwk: 152
