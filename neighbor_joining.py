@@ -1,9 +1,9 @@
 import numpy as np
 
 class Node:
-    def __init__(self, name, children = []):
+    def __init__(self, name, children = None):
         self.name = name
-        self.children = children
+        self.children = children if children is not None else []
         self.distance = None
         self.parent = None
     
@@ -33,12 +33,14 @@ def read_distance_matrix(filename):
     return taxa, np.array(distance_matrix)
 
 def join(nodes,i,j,distances,r,last_node):
-    mask = [n for n in range(len(nodes)) if n not in [i,j]]
+    mask = np.ones(len(nodes), dtype=bool)
+    mask[[i, j]] = False
 
     new_node_name = last_node
     i_node = nodes[i]
     j_node = nodes[j]
-    nodes = nodes[mask]
+    for idx in sorted([i, j], reverse=True):
+        nodes.pop(idx)
 
     d_ij = distances[i,j]
     distance_i = (d_ij+r[i]-r[j])/2
@@ -46,19 +48,21 @@ def join(nodes,i,j,distances,r,last_node):
     i_node.distance = distance_i
     j_node.distance = distance_j
     
-    nodes = np.append(nodes, Node(new_node_name, [i_node, j_node]))
+    nodes.append(Node(new_node_name, [i_node, j_node]))
     i_node.parent = nodes[-1]
     j_node.parent = nodes[-1]
 
-    new_distances = np.array([(distances[i,m] + distances[j,m] - d_ij)/2 for m in range(len(distances))])
+    new_distances = (distances[i] + distances[j] - d_ij) / 2
     new_distances = new_distances[mask]
     new_distances = np.expand_dims(new_distances, axis = 0)
-    distances = distances[mask]
-    distances = distances[:, mask]
-    distances = np.append(distances, new_distances, axis = 0)
-    new_distances = np.append(new_distances, np.array([[0]]), axis = 1)
-    distances = np.append(distances, new_distances.transpose(), axis = 1)
-    return nodes, distances
+
+    new_size = len(distances) - 1
+    new_matrix = np.zeros((new_size, new_size))
+    new_matrix[:-1, :-1] = distances[mask][:, mask]
+    new_matrix[-1, :-1] = new_distances
+    new_matrix[:-1, -1] = new_distances
+
+    return nodes, new_matrix
 
 def join_last_nodes(nodes, distances,last_node):
     root = Node(last_node, nodes)
@@ -77,16 +81,16 @@ def join_last_nodes(nodes, distances,last_node):
 
 def neighbour_joining(distances, taxa):
     #Initialize nodes for every taxa
-    nodes = np.array([Node(i) for i in range(len(taxa))])
+    nodes = [Node(i) for i in range(len(taxa))]
     n_nodes = len(taxa)
 
     while len(nodes) > 3:
         n_taxa = distances.shape[0]
         r = distances.sum(axis = 0)/(n_taxa-2)
-        n = np.subtract(distances, r)
-        n = np.subtract(n.transpose(), r).transpose()
+        n = distances - r[:, None] - r[None, :]
         np.fill_diagonal(n,np.inf)
-        min_pair = (n.argmin()//distances.shape[0], n.argmin()%distances.shape[0])
+        idx = n.argmin()
+        min_pair = (idx // n.shape[0], idx % n.shape[0])
         nodes, distances = join(nodes, min_pair[0], min_pair[1], distances, r, n_nodes)
         n_nodes += 1
 
