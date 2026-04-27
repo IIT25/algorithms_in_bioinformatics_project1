@@ -1,5 +1,31 @@
 import numpy as np
 
+def write_newick_to_file(filename, tree):
+    """
+    Helper function to write the newick tree to a .nwk file
+    """
+    with open(filename, "w") as f:
+        f.write(tree)
+
+def read_distance_matrix(filename):
+    """
+    Helper function to read the distance matrix and the
+    names of the taxa, recieves:
+        - Filename: The name of the file where the distance matrix is 
+            stored
+    """
+    with open(filename) as f:
+        lines = f.readlines()
+        n = int(lines[0])
+        taxa = []
+        distance_matrix = []
+        for i in range(1, n+1):
+            line = lines[i].split(' ')
+            taxa.append(line[0])
+            distance_matrix.append(list(map(float, line[1:])))
+    return taxa, np.array(distance_matrix)
+
+
 class Node:
     """
     Class to store the nodes and tree created by the neighbor
@@ -38,24 +64,6 @@ class Node:
         elif len(self.children) == 0:
             return f"{name}:{round(self.distance,2)}"
 
-
-def read_distance_matrix(filename):
-    """
-    Helper function to read the distance matrix and the
-    names of the taxa, recieves:
-        - Filename: The name of the file where the distance matrix is 
-            stored
-    """
-    with open(filename) as f:
-        lines = f.readlines()
-        n = int(lines[0])
-        taxa = []
-        distance_matrix = []
-        for i in range(1, n+1):
-            line = lines[i].split(' ')
-            taxa.append(line[0])
-            distance_matrix.append(list(map(float, line[1:])))
-    return taxa, np.array(distance_matrix)
 
 def join(nodes,i,j,distances,r,last_node):
     """
@@ -150,14 +158,6 @@ def neighbour_joining(distances, taxa):
 
     root = join_last_nodes(nodes, distances, n_nodes)
     return root
-
-def write_newick_to_file(filename, tree):
-    """
-    Helper function to write the newick tree to a .nwk file
-    """
-    with open(filename, "w") as f:
-        f.write(tree)
-
 
 if __name__ == '__main__':
     taxa, distances = read_distance_matrix("example_slide4.phy")
