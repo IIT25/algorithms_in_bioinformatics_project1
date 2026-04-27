@@ -52,6 +52,10 @@ class Node:
         """
         Function to write the tree in newick format
         Does a recursive traverse of the tree to write the tree
+
+        It recieves:
+            - taxa: A list with the name of the taxa represented in the tree
+                used to put the labels in the leaves.
         """
         if self.name < len(taxa):
             name = taxa[self.name]
@@ -116,7 +120,9 @@ def join_last_nodes(nodes, distances,last_node):
     Joins the last 3 nodes of the tree, assigning the right distances
     and creating the root of the tree.
     Recieves:
-        - nodes: 
+        - nodes: A list with the last 3 nodes
+        - distances: The distance matrix of the last 3 nodes
+        - last_node: name of the last created node, to continue with the sequence
     """
     root = Node(last_node, nodes)
     i_node = nodes[0]
