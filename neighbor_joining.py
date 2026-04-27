@@ -1,13 +1,32 @@
 import numpy as np
 
 class Node:
+    """
+    Class to store the nodes and tree created by the neighbor
+    joining algorithm
+    """
     def __init__(self, name, children = None):
+        """
+        Constructor of the class, recieves:
+            - name: name of the node, related to the taxon
+            - children: List of children of the new node created
+        
+        In addition, the following attributes are initialized:
+            - distance: Distance from the node to the parent
+            - parent: Parent of the node
+        Both attributes are initialized as None, since at first, the
+        node doesn't have a parent.
+        """
         self.name = name
         self.children = children if children is not None else []
         self.distance = None
         self.parent = None
     
     def write_in_newick(self, taxa):
+        """
+        Function to write the tree in newick format
+        Does a recursive traverse of the tree to write the tree
+        """
         if self.name < len(taxa):
             name = taxa[self.name]
         else:
@@ -21,6 +40,12 @@ class Node:
 
 
 def read_distance_matrix(filename):
+    """
+    Helper function to read the distance matrix and the
+    names of the taxa, recieves:
+        - Filename: The name of the file where the distance matrix is 
+            stored
+    """
     with open(filename) as f:
         lines = f.readlines()
         n = int(lines[0])
@@ -33,6 +58,19 @@ def read_distance_matrix(filename):
     return taxa, np.array(distance_matrix)
 
 def join(nodes,i,j,distances,r,last_node):
+    """
+    One of the main functions of the neighbor joining algorithm
+    Performs one step of the algorithm joining the two nodes selected
+    by the algorithm and updating the nodes list and distance matrix.
+
+    Recieves:
+        - nodes: List of current nodes 
+        - i: index of the first node to be joined
+        - j: index of the second node to be joined
+        - distances: Current distance matrix
+        - r: r vector
+        - last_node: name of the last created node, to continue with the sequence
+    """
     mask = np.ones(len(nodes), dtype=bool)
     mask[[i, j]] = False
 
@@ -65,6 +103,13 @@ def join(nodes,i,j,distances,r,last_node):
     return nodes, new_matrix
 
 def join_last_nodes(nodes, distances,last_node):
+    """
+    Last function in the neighbor joining procedure
+    Joins the last 3 nodes of the tree, assigning the right distances
+    and creating the root of the tree.
+    Recieves:
+        - nodes: 
+    """
     root = Node(last_node, nodes)
     i_node = nodes[0]
     j_node = nodes[1]
@@ -80,7 +125,16 @@ def join_last_nodes(nodes, distances,last_node):
     return root
 
 def neighbour_joining(distances, taxa):
-    #Initialize nodes for every taxa
+    """
+    Neighbor joining procedure, iteratively runs the algorithm
+    selecting with the r vector and the Q (also called n) matrix
+    the nodes to be joined until there are only 3 remaining.
+
+    Recieves:
+        - distances: Initial distance matrix
+        - taxa: List with the name of the taxa
+    """
+    
     nodes = [Node(i) for i in range(len(taxa))]
     n_nodes = len(taxa)
 
@@ -98,6 +152,9 @@ def neighbour_joining(distances, taxa):
     return root
 
 def write_newick_to_file(filename, tree):
+    """
+    Helper function to write the newick tree to a .nwk file
+    """
     with open(filename, "w") as f:
         f.write(tree)
 
