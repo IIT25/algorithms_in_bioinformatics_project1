@@ -48,3 +48,5 @@ for file in os.listdir(inputs_folder):
 
 time_results = pd.DataFrame({"n": lengths, "neighbor_joining": nj_times, "rapid_nj": rapid_nj_times, "quicktree": quicktree_times})
 time_results.to_csv("time_experiments_results.csv")
+
+# Heello
