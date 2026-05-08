@@ -1,5 +1,3 @@
-
-
 def get_even_odd_lists(string: str) -> tuple:
     """
     Args:
@@ -44,6 +42,10 @@ def find_best_folding_point(string: str, even: list, odd: list) -> tuple:
         match1 = min(even_left, odd_right)
         match2 = min(odd_left, even_right)
         
+        if string[index].lower() == 'h' and index + 1 < len(string) and string[index+1].lower() == 'h':
+            match1 = max(0, match1 - 1)
+            match2 = max(0, match2 - 1)
+        
         current_max = max(match1, match2)
         
         if current_max > best_size:
@@ -54,9 +56,34 @@ def find_best_folding_point(string: str, even: list, odd: list) -> tuple:
             else:
                 best_match_type = "OL/ER"
     return best_size, best_point, best_match_type
+
+def generate_fold(string: str, even: list, odd: list, best_size: int, best_point: int, best_match_type: str):
+    moves = ""
     
-string = "hhhhhhhhhhhhphphpp"
-even, odd = (get_even_odd_lists(string))
+    # Define which parity group we are using for the 'face' on each side
+    if best_match_type == "EL/OR":
+        left_block = even
+        right_block = odd
+    else:        
+        left_block = odd
+        right_block = even   
+
+    for i in range(best_point):
+        moves += "f"
+    
+    # 180-degree turn
+    moves += "rr"
+    
+    for j in range(best_point+2, len(string)):
+        moves += "f" 
+            
+    return moves
+
+string = "hhhhhhphphh"
+even, odd = get_even_odd_lists(string)
 print(find_best_folding_point(string, even, odd))
+best_size, best_point, best_match_type = find_best_folding_point(string, even, odd)
+print(generate_fold(string, even, odd, best_size, best_point, best_match_type))
+
 
 ### If your loop finds two different indices that give the same best_size, the algorithm usually prefers the one that sits on a Polar (P) bead or a long sequence of zeros, as this provides more "room" to make the turn on the lattice.
