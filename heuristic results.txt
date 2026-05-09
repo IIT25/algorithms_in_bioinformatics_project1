@@ -1,0 +1,15 @@
+hhppppphhppphppphp got the following results: ['rrrlrrflrrfflrrff', 'fffllffffrrffffff'] in time 0.0009968280792236328
+hphphhhppphhhhpphh got the following results: ['rrrllrlfllrrfrllf', 'lllflffrrfflflrrf', 'fffllffrrfffrfllf'] in time 0.0009996891021728516
+phpphphhhphhphhhhh got the following results: ['frllflrrllrllffrf', 'flrrfrllrrlrrfflf', 'ffllfrffllfrrflrf'] in time 0.0010030269622802734
+hphpphhphpphphhpphph got the following results: ['rrrllrllrllrrlrllfl', 'lllflfrrlrrlfrlrrlr', 'fffllfrrfllfrlfllrf'] in time 0.0009970664978027344
+hhhpphphphpphphphpph got the following results: ['rrrllflrrlrrffllrll', 'lllflflfflrrfrffllf', 'fffllffflflffffffll'] in time 0.0010001659393310547
+hhpphpphpphpphpphpphpphh got the following results: ['llrrlrrlrrlfrlrrfllfrrf', 'ffllfflflffrrfllfrrfllf'] in time 0.0
+pphpphhpppphhpppphhpppphh got the following results: ['ffrllrrllflrrllflrrllflf', 'fflrrllfrrfllfrrfllfrrff', 'fffllfffrrffffllffffrrff'] in time 0.002007007598876953
+ppphhpphhppppphhhhhhhpphhpppphhpphpp got the following results: ['fffrrllrrllflfffrrflrllrrllflrrllff', 'fffllrrllrrfrfffllfffrrllfrrfllrrff'] in time 0.0009989738464355469
+pphpphhpphhppppphhhhhhhhhhpppppphhpphhpphpphhhhh got the following results: ['fflrrllrrllrrfrffffllffrllrffrrfllrrllrrlrrfffl', 'fffllffrrfffllfffrlrlrlrffffllffffflrflfrrfflrr'] in time 0.003003358840942383
+hhphphphphhhhphppphppphpppphppphppphphhhhphphphphh got the following results: ['rrrfrfrlrrlrllrllfrfllrflrlffflffflrrlrrllflrrlrf', 'lllflflfflrlrrlrrflfrrlfffrfffrfffflrlrlrrfrllflf', 'fllflflfflrrfrflrrlfrfffllffffflfffflrffllrfflfrf'] in time 0.20045948028564453
+pphhhphhhhhhhhppphhhhhhhhhhphppphhhhhhhhhhhhpppphhhhhhphhphp got the following results: ['ffrrllfrlrlrrlrrflrllrlrlrllrllfrlrrfrllrlrrlrrfllrlrllrllf'] in time 0.002505064010620117
+hhhhhhhhhhhhphphpphhpphhpphpphhpphhpphpphhpphhpphphphhhhhhhhhhhh got the following results: ['rrrllrrllrrllflrllrrllrrllrlfrrllrrllrllfrllrrllrfffffrrflrrllf', 'lllflflfflfflffflffflfffflfrrllrrllrrlrrllrrllrrfrffflffllrrllf', 'fllflflfflfflffflffflfffflfrrffllffrrfllffrrffllfffrflrrfrflflf'] in time 0.0050106048583984375
+hhhhpppphhhhhhhhhhhhpppppphhhhhhhhhhhhppphhhhhhhhhhhhppphhhhhhhhhhhhppphpphhpphhpphph got the following results: ['rrrlrfrrlfrflrrfflrrlrllflrlrllrrlrrflfllrflfrrflrrflfllrflfrrflrrflfllrflfrllfrflff'] in time 0.0029990673065185547
+pppppphphhppppphhhphhhhhphhpppphhpphhphhhhhphhhhhhhhhhphhphhhhhhhppppppppppphhhhhhhpphphhhpppppphphh got the following results: ['fffffflrrllffllrfrrllrlrrllfrrfllrrlrrffffllfffrlrlrlrrlrrflrlrllrffffffffrfflrlrllflrlrrllrrfrfflf'] in time 0.8030993938446045
+ppphhpphhhhpphhhphhphhphhhhpppppppphhhhhhpphhhhhhppppppppphphhphhhhhhhhhhhpphhhphhphpphphhhpppppphhh got the following results: ['fffrrllfrlrllflrrlrrfllrlrrlrlrrfrllrfllrllrrlrrlrrllrfrrllflrrflrllrlrlrrllfrllrllfrrlrrlrlrllflrl', 'fffllrrflflrrflrrlrrfllrrllflfrlfflrlfflrfrrlrffllffflrfllrflrrfrllflfrrflrrffllfrrlrrlrfllffrrfffr'] in time 0.19537973403930664
