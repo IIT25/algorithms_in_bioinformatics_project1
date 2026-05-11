@@ -82,31 +82,34 @@ def generate_fold(string: str, even: list, odd: list, best_size: int, best_point
         left_block = [odd_idx for odd_idx in odd if odd_idx < best_point]
         right_block = [even_idx for even_idx in even if even_idx > best_point+1] 
 
-    #Left block
+    ### Left block
+    # Before matching points
     for current_index in range(left_block[0]):
         moves += "f"
     
+    # Spacing logic for the firts face
     for block_index in range(len(left_block) - 1):
         current_point = left_block[block_index]
         next_pairing_point = left_block[block_index+1]
         dist = next_pairing_point - current_point
         if dist == 2:
             moves += "ff"
-        else:
+        else: # Loop
             moves += "l" + "f"*(dist//2-2) + "rr" + "f"*(dist//2-2) + "l"
     
-    steps_to_fold = 0
+    # Steps to fold
     for current_index in range(left_block[-1], best_point):
         moves += "f"
-        steps_to_fold += 1
 
     # 180-degree turn
     moves += "rr"
     
-    #Right block
+    ### Right block
+    # Before matching points
     for j in range(best_point+2, right_block[0]):
         moves += "f" 
     
+    # Spacing logic for the second face
     for block_index in range(len(right_block) - 1):
         current_point = right_block[block_index]
         next_pairing_point = right_block[block_index+1]
@@ -116,6 +119,7 @@ def generate_fold(string: str, even: list, odd: list, best_size: int, best_point
         else:
             moves += "l" + "f"*(dist//2-2) + "rr" + "f"*(dist//2-2) + "l"
     
+    # Final steps
     for current_index in range(right_block[-1], len(string)-1):
         moves += "f"
 
