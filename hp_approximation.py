@@ -74,8 +74,7 @@ def find_best_folding_point(string: str, even: list, odd: list) -> tuple:
 
 def generate_fold(string: str, even: list, odd: list, best_size: int, best_point: int, best_match_type: str):
     moves = ""
-    # Define which parity group we are using for the 'face' on each side
-    #Limit the faces to be before and after the middle point
+    
     if best_match_type == "EL/OR":
         left_block = [even_idx for even_idx in even if even_idx < best_point]
         right_block = [odd_idx for odd_idx in odd if odd_idx > best_point+1]
@@ -108,7 +107,6 @@ def generate_fold(string: str, even: list, odd: list, best_size: int, best_point
     for j in range(best_point+2, right_block[0]):
         moves += "f" 
     
-            
     for block_index in range(len(right_block) - 1):
         current_point = right_block[block_index]
         next_pairing_point = right_block[block_index+1]
@@ -117,7 +115,6 @@ def generate_fold(string: str, even: list, odd: list, best_size: int, best_point
             moves += "ff"
         else:
             moves += "l" + "f"*(dist//2-2) + "rr" + "f"*(dist//2-2) + "l"
-    
     
     for current_index in range(right_block[-1], len(string)-1):
         moves += "f"
@@ -139,6 +136,3 @@ for string in inputs:
     t1 = time()
     with open("approximation results.txt", "a") as f:
         f.write(str(string) + " got the following result: "+ str(result) +" in time " + str(t1-t0) + "\n")
-
-
-### If your loop finds two different indices that give the same best_size, the algorithm usually prefers the one that sits on a Polar (P) bead or a long sequence of zeros, as this provides more "room" to make the turn on the lattice.
